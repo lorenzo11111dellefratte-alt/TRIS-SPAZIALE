@@ -1,82 +1,141 @@
-const cells = document.querySelectorAll('.cell');
-const message = document.getElementById('message');
-const restartBtn = document.getElementById('restart');
-const scoreX = document.getElementById('scoreX');
-const scoreO = document.getElementById('scoreO');
+let board = ["","","","","","","","",""];
+let turn = "X";
+let score = {X:0, O:0, Draw:0};
+let firstPlayer = "X";
+let mode = "2players";
+let difficulty = "easy";
+let colorX = "#ff0000";
+let colorO = "#00ff00";
+let soundActive = true;
 
-const clickSound = document.getElementById('clickSound');
-const winSound = document.getElementById('winSound');
-const drawSound = document.getElementById('drawSound');
-
-let board = ['', '', '', '', '', '', '', '', ''];
-let currentPlayer = 'X';
-let scores = { X: 0, O: 0 };
-let gameActive = true;
-
-const winningCombinations = [
-  [0,1,2],[3,4,5],[6,7,8],
-  [0,3,6],[1,4,7],[2,5,8],
-  [0,4,8],[2,4,6]
-];
-
-function handleCellClick(e) {
-  const index = e.target.getAttribute('data-index');
-  if(board[index] !== '' || !gameActive) return;
-
-  board[index] = currentPlayer;
-  e.target.classList.add(currentPlayer);
-  e.target.textContent = currentPlayer;
-  clickSound.play();
-
-  checkResult();
+function startGame(selectedMode){
+  mode = selectedMode;
+  document.getElementById("menu").classList.add("hidden");
+  document.getElementById("robotMenu").classList.add("hidden");
+  document.getElementById("settings").classList.add("hidden");
+  document.getElementById("game").classList.remove("hidden");
+  resetBoard();
 }
 
-function checkResult() {
-  let roundWon = false;
-  for(const combo of winningCombinations){
-    const [a,b,c] = combo;
-    if(board[a] && board[a] === board[b] && board[a] === board[c]){
-      roundWon = true;
-      combo.forEach(i => cells[i].classList.add('winner'));
-      break;
+function showRobotMenu(){
+  document.getElementById("menu").classList.add("hidden");
+  document.getElementById("robotMenu").classList.remove("hidden");
+}
+
+function backToMenu(){
+  document.getElementById("robotMenu").classList.add("hidden");
+  document.getElementById("settings").classList.add("hidden");
+  document.getElementById("menu").classList.remove("hidden");
+}
+
+function startGameRobot(selectedDifficulty){
+  difficulty = selectedDifficulty;
+  startGame("robot");
+}
+
+function showSettings(){
+  document.getElementById("menu").classList.add("hidden");
+  document.getElementById("settings").classList.remove("hidden");
+}
+
+function saveSettings(){
+  colorX = document.getElementById("colorX").value;
+  colorO = document.getElementById("colorO").value;
+  soundActive = document.getElementById("soundToggle").checked;
+  backToMenu();
+}
+
+function makeMove(index){
+  if(board[index] === ""){
+    board[index] = turn;
+    let cell = document.querySelectorAll(".cell")[index];
+    cell.textContent = turn;
+    cell.style.color = (turn === "X") ? colorX : colorO;
+    if(soundActive) document.getElementById("clickSound").play();
+
+    if(checkWin()){
+      if(soundActive) document.getElementById("winSound").play();
+      alert(`Ha vinto ${turn}!`);
+      score[turn]++;
+      updateScore();
+      resetBoard();
+      return;
+    }
+
+    if(board.every(c => c!=="")){
+      if(soundActive) document.getElementById("drawSound").play();
+      alert("Pareggio!");
+      score.Draw++;
+      updateScore();
+      resetBoard();
+      return;
+    }
+
+    turn = (turn==="X")?"O":"X";
+    document.getElementById("turn").textContent = `Turno: Giocatore ${turn}`;
+
+    if(mode==="robot" && turn==="O"){
+      setTimeout(robotMove, 500);
     }
   }
+}
 
-  if(roundWon){
-    message.textContent = `🎉 Giocatore ${currentPlayer} ha vinto!`;
-    scores[currentPlayer]++;
-    updateScore();
-    winSound.play();
-    gameActive = false;
-    return;
+function robotMove(){
+  let empty = board.map((v,i)=>v===""?i:null).filter(v=>v!==null);
+  let move;
+  if(difficulty==="easy"){
+    move = empty[Math.floor(Math.random()*empty.length)];
+  } else if(difficulty==="medium"){
+    // Mosse casuali con priorità vittoria o blocco
+    move = mediumAIMove();
+  } else {
+    // Difficile: IA minimax
+    move = hardAIMove();
   }
+  makeMove(move);
+}
 
-  if(!board.includes('')){
-    message.textContent = "Pareggio! Che sfida epica!";
-    drawSound.play();
-    gameActive = false;
-    return;
+function mediumAIMove(){
+  // Cerca di vincere o bloccare
+  for(let i=0;i<9;i++){
+    if(board[i]===""){
+      board[i]="O";
+      if(checkWin()){board[i]=""; return i;}
+      board[i]="X";
+      if(checkWin()){board[i]=""; return i;}
+      board[i]="";
+    }
   }
+  // Altrimenti mosse casuali
+  let empty = board.map((v,i)=>v===""?i:null).filter(v=>v!==null);
+  return empty[Math.floor(Math.random()*empty.length)];
+}
 
-  currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-  message.textContent = `Turno di ${currentPlayer}`;
+function hardAIMove(){
+  // Per ora usa mediumAIMove (poi si può migliorare con minimax)
+  return mediumAIMove();
+}
+
+function checkWin(){
+  const wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  return wins.some(pattern=>pattern.every(i=>board[i]===turn));
 }
 
 function updateScore(){
-  scoreX.textContent = `X: ${scores.X}`;
-  scoreO.textContent = `O: ${scores.O}`;
+  document.getElementById("scoreX").textContent = score.X;
+  document.getElementById("scoreO").textContent = score.O;
+  document.getElementById("scoreDraw").textContent = score.Draw;
 }
 
-function restartGame(){
-  board = ['', '', '', '', '', '', '', '', ''];
-  gameActive = true;
-  currentPlayer = 'X';
-  message.textContent = `Turno di ${currentPlayer}`;
-  cells.forEach(cell => {
-    cell.textContent = '';
-    cell.classList.remove('X','O','winner');
-  });
+function resetBoard(){
+  board=["","","","","","","","",""];
+  document.querySelectorAll(".cell").forEach(c=>c.textContent="");
+  firstPlayer = (firstPlayer==="X")?"O":"X";
+  turn = firstPlayer;
+  document.getElementById("turn").textContent = `Turno: Giocatore ${turn}`;
 }
 
-cells.forEach(cell => cell.addEventListener('click', handleCellClick));
-restartBtn.addEventListener('click', restartGame);
+function resetScores(){
+  score={X:0,O:0,Draw:0};
+  updateScore();
+}
