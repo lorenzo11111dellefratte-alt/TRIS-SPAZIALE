@@ -7,24 +7,18 @@ let difficulty = "easy";
 let colorX = "#ff0000";
 let colorO = "#00ff00";
 let soundActive = true;
-let defaultBackground = "radial-gradient(circle, #0a0a2a, #000)";
+let robotLock = false; 
+let defaultBackground = "radial-gradient(circle,#0a0a2a,#000)";
 
-/* --- MENU --- */
+/* MENU */
 function startGame(selectedMode){
   mode = selectedMode;
   document.getElementById("menu").classList.add("hidden");
-  document.getElementById("robotMenu").classList.add("hidden");
-  document.getElementById("settings").classList.add("hidden");
   document.getElementById("game").classList.remove("hidden");
   resetBoard();
 }
 
-function showRobotMenu(){
-  document.getElementById("menu").classList.add("hidden");
-  document.getElementById("robotMenu").classList.remove("hidden");
-}
-
-function backToMenu(){
+function backToMenu(){  
   document.getElementById("robotMenu").classList.add("hidden");
   document.getElementById("settings").classList.add("hidden");
   document.getElementById("menu").classList.remove("hidden");
@@ -35,115 +29,112 @@ function backToMenuFromGame(){
   document.getElementById("menu").classList.remove("hidden");
 }
 
-function startGameRobot(selectedDifficulty){
-  difficulty = selectedDifficulty;
+function showRobotMenu(){
+  document.getElementById("menu").classList.add("hidden");
+  document.getElementById("robotMenu").classList.remove("hidden");
+}
+
+function startGameRobot(dif){
+  difficulty = dif;
   startGame("robot");
 }
 
 function showSettings(){
   document.getElementById("menu").classList.add("hidden");
   document.getElementById("settings").classList.remove("hidden");
-  document.getElementById("previewX").style.backgroundColor = colorX;
-  document.getElementById("previewO").style.backgroundColor = colorO;
 }
 
+/* SETTINGS */
 function saveSettings(){
   colorX = document.getElementById("colorX").value;
   colorO = document.getElementById("colorO").value;
   soundActive = document.getElementById("soundToggle").checked;
-
-  document.getElementById("previewX").style.backgroundColor = colorX;
-  document.getElementById("previewO").style.backgroundColor = colorO;
-
   backToMenu();
 }
 
-/* --- SFONDO --- */
-function applyBackground(){
-  let url = document.getElementById("bgUrl").value.trim();
-  if(url){
-    document.body.style.backgroundImage = `url('${url}')`;
-    document.body.style.backgroundColor = "transparent";
-    document.body.style.backgroundSize = "cover";
-    document.body.style.backgroundPosition = "center";
+function applyBackgroundFile(){
+  let file = document.getElementById("bgFile").files[0];
+  if(file){
+    let reader = new FileReader();
+    reader.onload = (e)=>{
+      document.body.style.backgroundImage = `url('${e.target.result}')`;
+      document.body.style.backgroundSize = "cover";
+      document.body.style.backgroundPosition = "center";
+    };
+    reader.readAsDataURL(file);
   }
 }
 
 function resetBackground(){
-  document.body.style.backgroundImage = "";
   document.body.style.background = defaultBackground;
+  document.body.style.backgroundImage = "";
 }
 
-/* --- GIOCO --- */
+/* GAME */
 function makeMove(index){
-  if(board[index] === ""){
-    board[index] = turn;
-    let cell = document.querySelectorAll(".cell")[index];
-    cell.textContent = turn;
-    cell.style.color = (turn === "X") ? colorX : colorO;
-    if(soundActive) document.getElementById("clickSound").play();
+  if(robotLock) return;  
+  if(board[index] !== "") return;
 
-    if(checkWin(turn)){
-      if(soundActive) document.getElementById("winSound").play();
-      showPopup(`Ha vinto ${turn}!`);
-      score[turn]++;
-      updateScore();
-      return;
-    }
+  placeSymbol(index, turn);
 
-    if(board.every(c => c!=="")){
-      if(soundActive) document.getElementById("drawSound").play();
-      showPopup("Pareggio!");
-      score.Draw++;
-      updateScore();
-      return;
-    }
+  if(checkEnd()) return;
 
-    turn = (turn==="X")?"O":"X";
-    document.getElementById("turn").textContent = `Turno: Giocatore ${turn}`;
+  turn = (turn === "X") ? "O" : "X";
+  updateTurnLabel();
 
-    if(mode==="robot" && turn==="O"){
-      setTimeout(robotMove, 500);
-    }
+  if(mode === "robot" && turn === "O"){
+    robotLock = true;
+    robotMove();
+    robotLock = false;
   }
 }
 
-/* --- ROBOT --- */
+function placeSymbol(index, player){
+  board[index] = player;
+  let cell = document.querySelectorAll(".cell")[index];
+  cell.textContent = player;
+  cell.style.color = (player === "X") ? colorX : colorO;
+
+  if(soundActive) document.getElementById("clickSound").play();
+}
+
 function robotMove(){
   let empty = board.map((v,i)=>v===""?i:null).filter(v=>v!==null);
-  let move;
-  if(difficulty==="easy"){
-    move = empty[Math.floor(Math.random()*empty.length)];
-  } else if(difficulty==="medium"){
-    move = mediumAIMove();
-  } else {
-    move = hardAIMove();
+  let move = empty[Math.floor(Math.random()*empty.length)];
+  placeSymbol(move, "O");
+
+  if(checkEnd()) return;
+
+  turn = "X";
+  updateTurnLabel();
+}
+
+function checkEnd(){
+  if(checkWin(turn)){
+    if(soundActive) document.getElementById("winSound").play();
+    showPopup(`Ha vinto ${turn}!`);
+    score[turn]++;
+    updateScore();
+    return true;
   }
-  makeMove(move);
-}
 
-function mediumAIMove(){
-  for(let i=0;i<9;i++){
-    if(board[i]===""){
-      board[i]="O";
-      if(checkWin("O")){board[i]=""; return i;}
-      board[i]="X";
-      if(checkWin("X")){board[i]=""; return i;}
-      board[i]="";
-    }
+  if(board.every(v => v !== "")){
+    if(soundActive) document.getElementById("drawSound").play();
+    showPopup("Pareggio!");
+    score.Draw++;
+    updateScore();
+    return true;
   }
-  let empty = board.map((v,i)=>v===""?i:null).filter(v=>v!==null);
-  return empty[Math.floor(Math.random()*empty.length)];
+  return false;
 }
 
-function hardAIMove(){
-  return mediumAIMove();
-}
-
-/* --- SUPPORTO --- */
-function checkWin(player){
+function checkWin(p){
   const wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-  return wins.some(pattern=>pattern.every(i=>board[i]===player));
+  return wins.some(w => w.every(i => board[i] === p));
+}
+
+function updateTurnLabel(){
+  document.getElementById("turn").textContent = `Turno: ${turn}`;
 }
 
 function updateScore(){
@@ -153,21 +144,16 @@ function updateScore(){
 }
 
 function resetBoard(){
-  board=["","","","","","","","",""];
-  document.querySelectorAll(".cell").forEach(c=>c.textContent="");
-  firstPlayer = (firstPlayer==="X")?"O":"X";
+  board = ["","","","","","","","",""];
+  document.querySelectorAll(".cell").forEach(c => c.textContent = "");
+  firstPlayer = (firstPlayer === "X") ? "O" : "X";
   turn = firstPlayer;
-  document.getElementById("turn").textContent = `Turno: Giocatore ${turn}`;
+  updateTurnLabel();
 }
 
-function resetScores(){
-  score={X:0,O:0,Draw:0};
-  updateScore();
-}
-
-/* --- POPUP --- */
-function showPopup(message){
-  document.getElementById("popupText").textContent = message;
+/* POPUP */
+function showPopup(msg){
+  document.getElementById("popupText").textContent = msg;
   document.getElementById("popup").classList.remove("hidden");
 }
 
