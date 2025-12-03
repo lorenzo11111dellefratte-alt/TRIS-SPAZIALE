@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tris Spaziale XR</title>
+<title>Tris Spaziale XR Definitivo</title>
 <link rel="stylesheet" href="style.css">
 
 <!-- Audio -->
@@ -15,24 +15,24 @@
 <body>
 
 <!-- MENU DI PARTENZA -->
-<div id="menu">
-  <h1>Tris Spaziale XR</h1>
-  <button class="big-btn" onclick="startGame('2players')">2 Giocatori</button>
-  <button class="big-btn" onclick="showRobotMenu()">Gioca con il Robot</button>
-  <button class="big-btn" onclick="showSettings()">Impostazioni</button>
+<div id="menu" class="screen">
+  <h1 class="title">Tris Spaziale XR</h1>
+  <button class="big-btn glow" onclick="startGame('2players')">2 Giocatori</button>
+  <button class="big-btn glow" onclick="showRobotMenu()">Gioca con il Robot</button>
+  <button class="big-btn glow" onclick="showSettings()">Impostazioni</button>
 </div>
 
 <!-- SELEZIONE DIFFICOLTÀ ROBOT -->
-<div id="robotMenu" class="hidden">
+<div id="robotMenu" class="screen hidden">
   <h2>Seleziona Difficoltà Robot</h2>
-  <button class="big-btn" onclick="startGameRobot('easy')">Facile</button>
-  <button class="big-btn" onclick="startGameRobot('medium')">Medio</button>
-  <button class="big-btn" onclick="startGameRobot('hard')">Difficile</button>
-  <button class="big-btn" onclick="backToMenu()">Indietro</button>
+  <button class="big-btn glow" onclick="startGameRobot('easy')">Facile</button>
+  <button class="big-btn glow" onclick="startGameRobot('medium')">Medio</button>
+  <button class="big-btn glow" onclick="startGameRobot('hard')">Difficile</button>
+  <button class="big-btn glow" onclick="backToMenu()">Indietro</button>
 </div>
 
 <!-- IMPOSTAZIONI -->
-<div id="settings" class="hidden">
+<div id="settings" class="screen hidden">
   <h2>Impostazioni</h2>
   <div class="setting">
     <label>X:</label>
@@ -45,17 +45,17 @@
   <div class="setting">
     <label>Sfondo personalizzato:</label>
     <input type="file" id="bgFile" accept="image/*">
-    <button onclick="applyBackground()">Applica</button>
-    <button onclick="defaultBackground()">Sfondo predefinito</button>
+    <button class="small-btn" onclick="applyBackground()">Applica</button>
+    <button class="small-btn" onclick="defaultBackground()">Sfondo predefinito</button>
   </div>
   <div class="setting">
     <label><input type="checkbox" id="soundToggle" checked> Suoni attivi</label>
   </div>
-  <button class="big-btn" onclick="saveSettings()">Salva e Torna al Menu</button>
+  <button class="big-btn glow" onclick="saveSettings()">Salva e Torna al Menu</button>
 </div>
 
 <!-- GIOCO -->
-<div id="game" class="hidden">
+<div id="game" class="screen hidden">
   <h2 id="turn">Turno: Giocatore X</h2>
   <div id="board">
     <div class="cell" onclick="makeMove(0)"></div>
@@ -73,9 +73,9 @@
     <p>Giocatore O: <span id="scoreO">0</span></p>
     <p>Pareggi: <span id="scoreDraw">0</span></p>
   </div>
-  <button class="big-btn" onclick="resetBoard()">Nuova Partita</button>
-  <button class="big-btn" onclick="resetScores()">Reset Punteggi</button>
-  <button class="big-btn" onclick="backToMenu()">Home</button>
+  <button class="big-btn glow" onclick="resetBoard()">Nuova Partita</button>
+  <button class="big-btn glow" onclick="resetScores()">Reset Punteggi</button>
+  <button class="big-btn glow" onclick="backToMenu()">Home</button>
 </div>
 
 <!-- CONTATORE VISITE -->
