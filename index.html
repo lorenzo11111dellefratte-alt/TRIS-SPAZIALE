@@ -11,39 +11,41 @@
 <div id="menu" class="screen">
     <h1 class="title">SUPER TRIS</h1>
 
-    <button class="big-btn" onclick="startGame('2players')">🎮 Gioca in 2</button>
-    <button class="big-btn" onclick="showRobotMenu()">🤖 Modalità Robot</button>
-    <button class="big-btn" onclick="showSettings()">⚙️ Impostazioni</button>
+    <button class="menu-btn" onclick="startGame('2p')">🎮 Gioca in 2</button>
+    <button class="menu-btn" onclick="showRobotMenu()">🤖 Modalità Robot</button>
+    <button class="menu-btn" onclick="showSettings()">⚙️ Impostazioni</button>
 </div>
 
 <div id="robotMenu" class="screen hidden">
-    <h2>Scegli difficoltà</h2>
+    <h2 class="subtitle">Scegli difficoltà</h2>
 
-    <button class="big-btn" onclick="startGameRobot('easy')">Facile</button>
-    <button class="big-btn" onclick="startGameRobot('medium')">Media</button>
-    <button class="big-btn" onclick="startGameRobot('hard')">Difficile</button>
+    <button class="menu-btn" onclick="startGameRobot('easy')">Facile</button>
+    <button class="menu-btn" onclick="startGameRobot('medium')">Media</button>
+    <button class="menu-btn" onclick="startGameRobot('hard')">Difficile</button>
 
     <button class="back-btn" onclick="backToMenu()">⬅ Torna al Menu</button>
 </div>
 
 <div id="settings" class="screen hidden">
-    <h2>Impostazioni</h2>
+    <h2 class="subtitle">Impostazioni</h2>
 
     <label>Colore X:</label>
-    <input type="color" id="colorX" class="color-picker">
+    <input type="color" id="colorX">
 
     <label>Colore O:</label>
-    <input type="color" id="colorO" class="color-picker">
+    <input type="color" id="colorO">
 
-    <label>Immagine sfondo:</label>
-    <input type="file" id="bgInput" accept="image/*" onchange="applyBackground()">
+    <label>Scegli sfondo:</label>
+    <input type="file" id="bgInput" accept="image/*">
 
-    <button class="big-btn" onclick="resetBackground()">Sfondo Predefinito</button>
-    <button class="back-btn" onclick="backToMenu()">Salva e Torna</button>
+    <button class="menu-btn" onclick="applyBackground()">Applica sfondo</button>
+    <button class="menu-btn" onclick="resetBackground()">Sfondo predefinito</button>
+
+    <button class="back-btn" onclick="backToMenu()">⬅ Salva e Torna</button>
 </div>
 
 <div id="game" class="screen hidden">
-    <h2 id="turn">Turno: X</h2>
+    <h2 id="turn" class="subtitle"></h2>
 
     <div id="board"></div>
 
@@ -51,6 +53,5 @@
 </div>
 
 <script src="script.js"></script>
-
 </body>
 </html>
