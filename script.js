@@ -1,3 +1,4 @@
+// VARIABILI GLOBALI
 let board = ["","","","","","","","",""];
 let turn = "X";
 let score = {X:0, O:0, Draw:0};
@@ -8,6 +9,7 @@ let colorX = "#ff0000";
 let colorO = "#00ff00";
 let soundActive = true;
 
+// FUNZIONI MENU
 function startGame(selectedMode){
   mode = selectedMode;
   document.getElementById("menu").classList.add("hidden");
@@ -46,6 +48,7 @@ function saveSettings(){
   backToMenu();
 }
 
+// SFONDO PERSONALIZZATO
 function applyBackground(){
   const file = document.getElementById("bgFile").files[0];
   if(file){
@@ -64,6 +67,7 @@ function defaultBackground(){
   document.body.style.backgroundSize = "auto";
 }
 
+// GIOCO
 function makeMove(index){
   if(board[index] === "" && !(mode==="robot" && turn==="O")){
     board[index] = turn;
@@ -94,11 +98,12 @@ function makeMove(index){
     document.getElementById("turn").textContent = `Turno: Giocatore ${turn}`;
 
     if(mode==="robot" && turn==="O"){
-      setTimeout(robotMove, 200); // immediato
+      setTimeout(robotMove, 150); // mosse rapide
     }
   }
 }
 
+// IA ROBOT
 function robotMove(){
   let empty = board.map((v,i)=>v===""?i:null).filter(v=>v!==null);
   let move;
@@ -127,20 +132,23 @@ function mediumAIMove(){
 }
 
 function hardAIMove(){
-  return mediumAIMove();
+  return mediumAIMove(); // base, si può aggiungere minimax
 }
 
+// CONTROLLA VITTORIA
 function checkWin(){
   const wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
   return wins.some(pattern=>pattern.every(i=>board[i]===turn));
 }
 
+// AGGIORNA PUNTEGGI
 function updateScore(){
   document.getElementById("scoreX").textContent = score.X;
   document.getElementById("scoreO").textContent = score.O;
   document.getElementById("scoreDraw").textContent = score.Draw;
 }
 
+// RESET BOARD
 function resetBoard(){
   board=["","","","","","","","",""];
   document.querySelectorAll(".cell").forEach(c=>c.textContent="");
@@ -149,8 +157,8 @@ function resetBoard(){
   document.getElementById("turn").textContent = `Turno: Giocatore ${turn}`;
 }
 
+// RESET PUNTEGGI
 function resetScores(){
   score={X:0,O:0,Draw:0};
   updateScore();
 }
-
