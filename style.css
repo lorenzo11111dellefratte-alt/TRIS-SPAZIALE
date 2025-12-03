@@ -7,101 +7,68 @@ body {
   padding: 0;
   min-height: 100vh;
   background-size: cover;
-  background-position: center;
 }
 
 .hidden { display: none; }
 
-/* MENU */
+/* MENU BUTTONS */
 .menu-btn {
-  display: block;
-  width: 300px;
-  height: 100px;
-  font-size: 36px;
+  width: 80%;
+  max-width: 400px;
+  height: 90px;
+  font-size: 32px;
   margin: 20px auto;
+  display: block;
   border-radius: 20px;
-  background-color: #222;
-  color: white;
   border: none;
+  background: #222;
+  color: white;
   cursor: pointer;
-  transition: transform 0.2s, background 0.3s;
+  transition: 0.2s;
 }
-
-.menu-btn:hover {
-  background-color: #444;
-  transform: scale(1.05);
-}
+.menu-btn:hover { background: #444; transform: scale(1.05); }
 
 /* BOARD */
 #board {
   display: grid;
-  grid-template-columns: repeat(3, 250px);
-  grid-gap: 20px;
+  grid-template-columns: repeat(3, min(25vw, 140px));
+  gap: 10px;
   justify-content: center;
-  margin: 40px auto;
+  margin: 20px auto;
 }
 
 .cell {
-  width: 250px;
-  height: 250px;
-  background: rgba(17,17,17,0.85);
-  border: 4px solid #555;
-  border-radius: 25px;
-  font-size: 120px;
+  width: min(25vw, 140px);
+  height: min(25vw, 140px);
+  background: rgba(20,20,20,0.9);
+  border: 3px solid #555;
+  border-radius: 20px;
+  font-size: min(18vw, 100px);
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
-}
-
-.cell:hover {
-  background: rgba(34,34,34,0.9);
-  transform: scale(1.05);
 }
 
 /* SCORE */
 #score p {
-  font-size: 26px;
-  margin: 10px;
+  font-size: 22px;
 }
 
 /* POPUP */
 #popup {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   background: rgba(0,0,0,0.85);
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
 #popup.hidden { display: none; }
 
 #popupBox {
-  background: rgba(17,17,17,0.95);
-  padding: 50px 60px;
-  border: 4px solid #44f;
-  border-radius: 25px;
-  box-shadow: 0 0 40px #44f;
-  font-size: 28px;
-}
-
-/* COLOR SETTINGS */
-.color-setting {
-  margin: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-}
-
-.color-box {
-  width: 80px;
-  height: 80px;
-  border-radius: 15px;
-  border: 2px solid #555;
+  background: #222;
+  padding: 40px;
+  border-radius: 20px;
 }
