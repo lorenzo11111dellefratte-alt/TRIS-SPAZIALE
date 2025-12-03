@@ -8,79 +8,82 @@ body {
     color: white;
 }
 
-.screen {
-    padding-top: 20px;
-}
-
 .hidden {
     display: none;
 }
 
 .title {
-    font-size: 45px;
-    margin-bottom: 40px;
+    font-size: 42px;
+    margin-top: 40px;
 }
 
-.big-btn {
+.subtitle {
+    font-size: 32px;
+    margin: 20px 0;
+}
+
+.menu-btn {
     width: 80%;
-    max-width: 350px;
+    max-width: 400px;
     padding: 20px;
-    font-size: 24px;
+    font-size: 22px;
     margin: 15px auto;
     display: block;
-    border-radius: 15px;
     border: none;
+    border-radius: 15px;
     background: #222;
     color: white;
-    transition: 0.2s;
 }
 
-.big-btn:hover {
+.menu-btn:hover {
     background: #444;
 }
 
 .back-btn {
+    margin-top: 20px;
     padding: 15px 25px;
     font-size: 20px;
-    margin-top: 20px;
     border-radius: 12px;
     border: none;
 }
 
-.color-picker {
-    width: 150px;
-    height: 70px;
-    margin: 10px;
-}
-
 #board {
     width: 90vw;
-    max-width: 400px;
+    max-width: 420px;
     height: 90vw;
-    max-height: 400px;
+    max-height: 420px;
 
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-gap: 8px;
-
+    gap: 10px;
     margin: 20px auto;
 }
 
 .cell {
     background: rgba(0,0,0,0.6);
     border-radius: 20px;
-    font-size: 12vw;
-    max-font-size: 100px;
-
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size: 12vw;
+    max-font-size: 110px;
     cursor: pointer;
-
     user-select: none;
+    color: white;
     transition: 0.2s;
 }
 
 .cell:hover {
-    background: rgba(40,40,40,0.7);
+    background: rgba(50,50,50,0.7);
+}
+
+label {
+    font-size: 20px;
+    display: block;
+    margin-top: 15px;
+}
+
+input[type=color], input[type=file] {
+    margin: 10px;
+    transform: scale(1.2);
 }
