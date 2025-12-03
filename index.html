@@ -1,67 +1,89 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-6487J1Y88Z"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tris Spaziale XR</title>
+<link rel="stylesheet" href="style.css">
 
-  gtag('config', 'G-6487J1Y88Z');
-</script>    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Tris</title>
-    <link rel="stylesheet" href="style.css">
+<!-- Audio -->
+<audio id="clickSound" src="click.mp3"></audio>
+<audio id="winSound" src="win.mp3"></audio>
+<audio id="drawSound" src="draw.mp3"></audio>
+
 </head>
 <body>
 
-<div id="menu" class="screen">
-    <h1 class="title">SUPER TRIS</h1>
-
-    <button class="menu-btn" onclick="startGame('2p')">🎮 Gioca in 2</button>
-    <button class="menu-btn" onclick="showRobotMenu()">🤖 Modalità Robot</button>
-    <button class="menu-btn" onclick="showSettings()">⚙️ Impostazioni</button>
+<!-- MENU DI PARTENZA -->
+<div id="menu">
+  <h1>Tris Spaziale XR</h1>
+  <button class="big-btn" onclick="startGame('2players')">2 Giocatori</button>
+  <button class="big-btn" onclick="showRobotMenu()">Gioca con il Robot</button>
+  <button class="big-btn" onclick="showSettings()">Impostazioni</button>
 </div>
 
-<div id="robotMenu" class="screen hidden">
-    <h2 class="subtitle">Scegli difficoltà</h2>
-
-    <button class="menu-btn" onclick="startGameRobot('easy')">Facile</button>
-    <button class="menu-btn" onclick="startGameRobot('medium')">Media</button>
-    <button class="menu-btn" onclick="startGameRobot('hard')">Difficile</button>
-
-    <button class="back-btn" onclick="backToMenu()">⬅ Torna al Menu</button>
+<!-- SELEZIONE DIFFICOLTÀ ROBOT -->
+<div id="robotMenu" class="hidden">
+  <h2>Seleziona Difficoltà Robot</h2>
+  <button class="big-btn" onclick="startGameRobot('easy')">Facile</button>
+  <button class="big-btn" onclick="startGameRobot('medium')">Medio</button>
+  <button class="big-btn" onclick="startGameRobot('hard')">Difficile</button>
+  <button class="big-btn" onclick="backToMenu()">Indietro</button>
 </div>
 
-<div id="settings" class="screen hidden">
-    <h2 class="subtitle">Impostazioni</h2>
-
-    <label>Colore X:</label>
-    <input type="color" id="colorX">
-
-    <label>Colore O:</label>
-    <input type="color" id="colorO">
-
-    <label>Scegli sfondo:</label>
-    <input type="file" id="bgInput" accept="image/*">
-
-    <button class="menu-btn" onclick="applyBackground()">Applica sfondo</button>
-    <button class="menu-btn" onclick="resetBackground()">Sfondo predefinito</button>
-
-    <button class="back-btn" onclick="backToMenu()">⬅ Salva e Torna</button>
+<!-- IMPOSTAZIONI -->
+<div id="settings" class="hidden">
+  <h2>Impostazioni</h2>
+  <div class="setting">
+    <label>X:</label>
+    <input type="color" id="colorX" value="#ff0000">
+  </div>
+  <div class="setting">
+    <label>O:</label>
+    <input type="color" id="colorO" value="#00ff00">
+  </div>
+  <div class="setting">
+    <label>Sfondo personalizzato:</label>
+    <input type="file" id="bgFile" accept="image/*">
+    <button onclick="applyBackground()">Applica</button>
+    <button onclick="defaultBackground()">Sfondo predefinito</button>
+  </div>
+  <div class="setting">
+    <label><input type="checkbox" id="soundToggle" checked> Suoni attivi</label>
+  </div>
+  <button class="big-btn" onclick="saveSettings()">Salva e Torna al Menu</button>
 </div>
 
-<div id="game" class="screen hidden">
-    <h2 id="turn" class="subtitle"></h2>
+<!-- GIOCO -->
+<div id="game" class="hidden">
+  <h2 id="turn">Turno: Giocatore X</h2>
+  <div id="board">
+    <div class="cell" onclick="makeMove(0)"></div>
+    <div class="cell" onclick="makeMove(1)"></div>
+    <div class="cell" onclick="makeMove(2)"></div>
+    <div class="cell" onclick="makeMove(3)"></div>
+    <div class="cell" onclick="makeMove(4)"></div>
+    <div class="cell" onclick="makeMove(5)"></div>
+    <div class="cell" onclick="makeMove(6)"></div>
+    <div class="cell" onclick="makeMove(7)"></div>
+    <div class="cell" onclick="makeMove(8)"></div>
+  </div>
+  <div id="score">
+    <p>Giocatore X: <span id="scoreX">0</span></p>
+    <p>Giocatore O: <span id="scoreO">0</span></p>
+    <p>Pareggi: <span id="scoreDraw">0</span></p>
+  </div>
+  <button class="big-btn" onclick="resetBoard()">Nuova Partita</button>
+  <button class="big-btn" onclick="resetScores()">Reset Punteggi</button>
+  <button class="big-btn" onclick="backToMenu()">Home</button>
+</div>
 
-    <div id="board"></div>
-
-    <button class="back-btn" onclick="exitToMenu()">⬅ Torna al Menu</button>
+<!-- CONTATORE VISITE -->
+<div class="counter">
+  <p>Visite al sito:</p>
+  <img src="https://hitwebcounter.com/counter/counter.php?page=123456&style=0010&nbdigits=5" border="0" alt="Contatore visite">
 </div>
 
 <script src="script.js"></script>
 </body>
-   <script data-goatcounter="https://lorenzo.goatcounter.com/count"
-        asincrono src="//gc.zgo.at/count.js"></script>
 </html>
