@@ -1,99 +1,56 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tris Spaziale XR</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Tris</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- HOME MENU -->
-<div id="menu">
-  <h1>Tris Spaziale XR</h1>
-  <button class="menu-btn" onclick="startGame('2players')">2 Giocatori</button>
-  <button class="menu-btn" onclick="showRobotMenu()">Gioca con il Robot</button>
-  <button class="menu-btn" onclick="showSettings()">Impostazioni</button>
+<div id="menu" class="screen">
+    <h1 class="title">SUPER TRIS</h1>
+
+    <button class="big-btn" onclick="startGame('2players')">🎮 Gioca in 2</button>
+    <button class="big-btn" onclick="showRobotMenu()">🤖 Modalità Robot</button>
+    <button class="big-btn" onclick="showSettings()">⚙️ Impostazioni</button>
 </div>
 
-<!-- ROBOT DIFFICULTY -->
-<div id="robotMenu" class="hidden">
-  <h2>Difficoltà Robot</h2>
-  <button class="menu-btn" onclick="startGameRobot('easy')">Facile</button>
-  <button class="menu-btn" onclick="startGameRobot('medium')">Medio</button>
-  <button class="menu-btn" onclick="startGameRobot('hard')">Difficile</button>
-  <button class="menu-btn" onclick="backToMenu()">Indietro</button>
+<div id="robotMenu" class="screen hidden">
+    <h2>Scegli difficoltà</h2>
+
+    <button class="big-btn" onclick="startGameRobot('easy')">Facile</button>
+    <button class="big-btn" onclick="startGameRobot('medium')">Media</button>
+    <button class="big-btn" onclick="startGameRobot('hard')">Difficile</button>
+
+    <button class="back-btn" onclick="backToMenu()">⬅ Torna al Menu</button>
 </div>
 
-<!-- SETTINGS -->
-<div id="settings" class="hidden">
-  <h2>Impostazioni</h2>
+<div id="settings" class="screen hidden">
+    <h2>Impostazioni</h2>
 
-  <div class="setting-row">
     <label>Colore X:</label>
-    <input type="color" id="colorX" value="#ff0000">
-  </div>
+    <input type="color" id="colorX" class="color-picker">
 
-  <div class="setting-row">
     <label>Colore O:</label>
-    <input type="color" id="colorO" value="#00ff00">
-  </div>
+    <input type="color" id="colorO" class="color-picker">
 
-  <div class="setting-row">
-    <label>Suoni attivi</label>
-    <input type="checkbox" id="soundToggle" checked>
-  </div>
+    <label>Immagine sfondo:</label>
+    <input type="file" id="bgInput" accept="image/*" onchange="applyBackground()">
 
-  <div class="setting-row">
-    <label>Sfondo da file:</label>
-    <input type="file" id="bgFile">
-  </div>
-
-  <button class="menu-btn" onclick="applyBackgroundFile()">Applica Sfondo</button>
-  <button class="menu-btn" onclick="resetBackground()">Sfondo Predefinito</button>
-  <button class="menu-btn" onclick="backToMenu()">Torna al Menu</button>
+    <button class="big-btn" onclick="resetBackground()">Sfondo Predefinito</button>
+    <button class="back-btn" onclick="backToMenu()">Salva e Torna</button>
 </div>
 
-<!-- GAME -->
-<div id="game" class="hidden">
-  <h2 id="turn">Turno: Giocatore X</h2>
+<div id="game" class="screen hidden">
+    <h2 id="turn">Turno: X</h2>
 
-  <div id="board">
-    <div class="cell" onclick="makeMove(0)"></div>
-    <div class="cell" onclick="makeMove(1)"></div>
-    <div class="cell" onclick="makeMove(2)"></div>
-    <div class="cell" onclick="makeMove(3)"></div>
-    <div class="cell" onclick="makeMove(4)"></div>
-    <div class="cell" onclick="makeMove(5)"></div>
-    <div class="cell" onclick="makeMove(6)"></div>
-    <div class="cell" onclick="makeMove(7)"></div>
-    <div class="cell" onclick="makeMove(8)"></div>
-  </div>
+    <div id="board"></div>
 
-  <div id="score">
-    <p>X: <span id="scoreX">0</span></p>
-    <p>O: <span id="scoreO">0</span></p>
-    <p>Pareggi: <span id="scoreDraw">0</span></p>
-  </div>
-
-  <button class="menu-btn" onclick="resetBoard()">Nuova Partita</button>
-  <button class="menu-btn" onclick="resetScores()">Reset Punteggi</button>
-  <button class="menu-btn" onclick="backToMenuFromGame()">Home</button>
+    <button class="back-btn" onclick="exitToMenu()">⬅ Torna al Menu</button>
 </div>
-
-<!-- POPUP -->
-<div id="popup" class="hidden">
-  <div id="popupBox">
-    <h2 id="popupText"></h2>
-    <button class="menu-btn" onclick="closePopup()">OK</button>
-  </div>
-</div>
-
-<!-- AUDIO -->
-<audio id="clickSound" src="click.mp3"></audio>
-<audio id="winSound" src="win.mp3"></audio>
-<audio id="drawSound" src="draw.mp3"></audio>
 
 <script src="script.js"></script>
+
 </body>
 </html>
